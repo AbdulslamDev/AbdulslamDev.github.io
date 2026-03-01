@@ -137,8 +137,9 @@
       .about-grid,.contact-wrapper{grid-template-columns:1fr}
       .projects-grid{grid-template-columns:1fr}
     }
-    .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
-    .reveal.visible{opacity:1;transform:none}
+    .reveal{opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease}
+    .reveal.animate{opacity:0;transform:translateY(24px)}
+    .reveal.animate.visible{opacity:1;transform:none}
   </style>
 </head>
 <body>
@@ -489,4 +490,12 @@
   }
   setTimeout(type,800);
 
-  const io=new Intersect
+  const revealEls = document.querySelectorAll('.reveal');
+  revealEls.forEach(el => el.classList.add('animate'));
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(e => io.observe(e));
+</script>
+</body>
+</html>
